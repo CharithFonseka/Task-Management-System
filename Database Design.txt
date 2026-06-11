@@ -1,0 +1,62 @@
+Table users {
+  id uuid [pk]
+  name varchar [not null]
+  email varchar [unique, not null]
+  password varchar [not null]
+  role varchar [not null]
+  is_active boolean [default: true]
+  must_reset_password boolean [default: true]
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table projects {
+  id uuid [pk]
+  title varchar [not null]
+  description text
+  created_by uuid [ref: > users.id]
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table tasks {
+  id uuid [pk]
+  title varchar [not null]
+  description text
+  project_id uuid [ref: > projects.id]
+  assigned_to uuid [ref: > users.id]
+  created_by uuid [ref: > users.id]
+  priority varchar
+  status varchar
+  due_date date
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table comments {
+  id uuid [pk]
+  task_id uuid [ref: > tasks.id]
+  user_id uuid [ref: > users.id]
+  content text [not null]
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table attachments {
+  id uuid [pk]
+  task_id uuid [ref: > tasks.id]
+  uploaded_by uuid [ref: > users.id]
+  file_url varchar [not null]
+  file_name varchar
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table notifications {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+  message varchar [not null]
+  is_read boolean [default: false]
+  createdAt timestamp
+  updatedAt timestamp
+}
